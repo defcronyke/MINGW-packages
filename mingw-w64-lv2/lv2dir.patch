@@ -1,0 +1,11 @@
+diff -aur lv2-1.14.0/wscript lv2-1.14.0.fixed/wscript
+--- lv2-1.14.0/wscript	2016-09-19 21:34:12.000000000 -0400
++++ lv2-1.14.0.fixed/wscript	2016-10-07 19:12:50.523806000 -0400
+@@ -62,6 +62,7 @@
+     conf.env.BUILD_PLUGINS = not Options.options.no_plugins
+     conf.env.COPY_HEADERS  = Options.options.copy_headers
+     conf.env.ONLINE_DOCS   = Options.options.online_docs
++    conf.env.LV2DIR = os.path.join(os.getcwd(), 'LV2')
+ 
+     if conf.env.DOCS or conf.env.ONLINE_DOCS:
+         try:
