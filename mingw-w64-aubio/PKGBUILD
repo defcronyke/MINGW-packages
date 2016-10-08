@@ -1,0 +1,35 @@
+# Maintainer: Jeremy Carter <Jeremy@JeremyCarter.ca>
+# Borrowed from previous maintainer: Tim Mayberry <mojofunk@gmail.com>
+
+_realname=aubio
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=0.4.3
+pkgrel=1
+pkgdesc="Aubio library (mingw-w64)"
+arch=('any')
+url="http://aubio.org"
+license=("GPLv2+")
+makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
+             "${MINGW_PACKAGE_PREFIX}-pkg-config"
+             'python2')
+depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
+         "${MINGW_PACKAGE_PREFIX}-libsamplerate"
+         "${MINGW_PACKAGE_PREFIX}-fftw")
+options=('staticlibs') # '!strip' 'debug')
+source=("http://aubio.org/pub/${_realname}-${pkgver}.tar.bz2")
+md5sums=('52a960cfc8a3e3125f3a258545d1c7e5')
+
+build() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  export PKG_CONFIG_PATH=${MINGW_PREFIX}/lib/pkgconfig
+  export PKGCONFIG=${MINGW_PREFIX}/bin/pkg-config.exe
+  /usr/bin/python2 ./waf configure --prefix=${MINGW_PREFIX} \
+                         --disable-jack --with-target-platform=win32
+  /usr/bin/python2 ./waf build
+}
+
+package() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  /usr/bin/python2 ./waf --destdir="${pkgdir}" install
+  mv "${pkgdir}${MINGW_PREFIX}/lib/"*.dll* "${pkgdir}/${MINGW_PREFIX}/bin"
+}

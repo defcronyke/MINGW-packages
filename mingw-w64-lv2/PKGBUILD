@@ -18,12 +18,14 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
 optdepends=("${MINGW_PACKAGE_PREFIX}-libsndfile: Example sampler"
             "${MINGW_PACKAGE_PREFIX}-gtk2: Example sampler"
             'python3: Scripts')
-source=("http://lv2plug.in/spec/${_realname}-${pkgver}.tar.bz2")
-md5sums=('0b56285a77aac3c93b50c36203aa91ee')
+source=("http://lv2plug.in/spec/${_realname}-${pkgver}.tar.bz2"
+        "lv2dir.patch")
+md5sums=('0b56285a77aac3c93b50c36203aa91ee'
+         '9d15cb68610ad3bd429a7b75ba2a1398')
 
 prepare() {
     cd "${srcdir}/${_realname}-${pkgver}"
-    patch -p1 -i "${srcdir}/../lv2dir.patch"
+    patch -p1 -i "${srcdir}/lv2dir.patch"
 }
 
 build() {
