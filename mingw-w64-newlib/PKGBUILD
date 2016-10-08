@@ -1,0 +1,36 @@
+# Maintainer: Jeremy Carter <Jeremy@JeremyCarter.ca>
+
+_realname=newlib
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=2.4.0.20160923
+pkgrel=1
+pkgdesc="Newlib (mingw-w64)"
+arch=('any')
+url="https://sourceware.org/newlib"
+license=("GPL")
+makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
+             "${MINGW_PACKAGE_PREFIX}-pkg-config")
+depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs")
+options=('staticlibs') # '!strip' 'debug')
+source=("ftp://sourceware.org/pub/${_realname}/${_realname}-${pkgver}.tar.gz")
+md5sums=('4a5cab49aa6ec568f0ddac85788fe10b')
+
+build() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  mkdir -p "${srcdir}/build-${CARCH}"
+  cd "${srcdir}/build-${CARCH}"
+
+  export PKG_CONFIG_PATH=${MINGW_PREFIX}/lib/pkgconfig
+  export PKGCONFIG=${MINGW_PREFIX}/bin/pkg-config.exe
+  ../${_realname}-${pkgver}/configure \
+  --prefix=${MINGW_PREFIX} \
+  --build=${MINGW_CHOST} \
+  --host=${MINGW_CHOST} \
+  --target=${MINGW_CHOST}
+  make
+}
+
+package() {
+  cd "${srcdir}/build-${CARCH}"
+  make DESTDIR="$pkgdir" install
+}
